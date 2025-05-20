@@ -2,6 +2,11 @@
 
 A Laravel package that provides React-based custom error pages with Filament admin panel integration.
 
+[![Latest Version on Packagist](https://img.shields.io/packagist/v/ch-makara-roth/filament-react-error-pages.svg?style=flat-square)](https://packagist.org/packages/ch-makara-roth/filament-react-error-pages)
+[![GitHub Tests Action Status](https://img.shields.io/github/workflow/status/ch-makara-roth/filament-react-error-pages/run-tests?label=tests)](https://github.com/ch-makara-roth/filament-react-error-pages/actions?query=workflow%3Arun-tests+branch%3Amain)
+[![Total Downloads](https://img.shields.io/packagist/dt/ch-makara-roth/filament-react-error-pages.svg?style=flat-square)](https://packagist.org/packages/ch-makara-roth/filament-react-error-pages)
+[![License](https://img.shields.io/github/license/ch-makara-roth/filament-react-error-pages?style=flat-square)](LICENSE.md)
+
 ## Features
 
 - Custom React-powered error pages for your Laravel application
@@ -9,6 +14,10 @@ A Laravel package that provides React-based custom error pages with Filament adm
 - TypeScript support for better development experience
 - Customizable styles and configurations
 - Easy to extend with your own error components
+
+## Screenshots
+
+*Coming soon*
 
 ## Installation
 
@@ -22,7 +31,7 @@ A Laravel package that provides React-based custom error pages with Filament adm
 ### Via Composer
 
 ```bash
-composer require makararoth/filament-react-error-pages
+composer require ch-makara-roth/filament-react-error-pages
 ```
 
 ### Publish Assets and Config
@@ -87,37 +96,84 @@ You can create your own custom error components by:
 ],
 ```
 
+### Usage in Blade Templates
+
+You can render error pages manually in your Blade templates:
+
+```php
+{!! app('filament-react-error-pages')->render(404, [
+    'message' => 'The page you were looking for could not be found.',
+    'companyName' => config('app.name'),
+    'supportEmail' => 'support@example.com',
+]) !!}
+```
+
 ### Filament Integration
 
-When Filament integration is enabled, the package will provide custom error pages within the Filament admin panel. This ensures a consistent look and feel across your admin interface.
+When Filament integration is enabled, the package will provide custom error pages within the Filament admin panel. Example usage:
 
-## Building from Source
-
-If you want to modify the React components:
-
-1. Clone the repository
-2. Install dependencies with `npm install`
-3. Run `npm run build` to compile TypeScript and build the assets
-4. Publish the built assets with `php artisan vendor:publish --tag=filament-react-error-pages-assets`
-
-## Development
-
-### Development Server
-
-```bash
-npm run dev
+```php
+// In a Filament page or resource
+public function render()
+{
+    try {
+        // Your code that might throw an exception
+    } catch (\Exception $e) {
+        return view('filament-react-error-pages::examples.filament-integration', [
+            'errorCode' => 500,
+            'message' => 'An error occurred while processing your request.',
+        ]);
+    }
+    
+    return parent::render();
+}
 ```
 
-### Testing
+## Customization
+
+### Styling the Error Pages
+
+You can customize the appearance of error pages by:
+
+1. Modifying the config file
+2. Creating custom React components
+3. Publishing and editing the views
+
+### Supported Error Codes
+
+- 400 (Bad Request)
+- 401 (Unauthorized)
+- 403 (Forbidden)
+- 404 (Not Found)
+- 419 (Page Expired)
+- 429 (Too Many Requests)
+- 500 (Server Error)
+- 503 (Service Unavailable)
+
+## Testing
 
 ```bash
-npm run test
+composer test
+npm test
 ```
+
+## Changelog
+
+Please see [CHANGELOG.md](CHANGELOG.md) for more information on what has changed recently.
 
 ## Contributing
 
 Contributions are welcome! Please feel free to submit a Pull Request.
 
+## Security Vulnerabilities
+
+If you discover a security vulnerability, please send an e-mail to Makara Roth via [your-email@example.com](mailto:your-email@example.com). All security vulnerabilities will be promptly addressed.
+
+## Credits
+
+- [Makara Roth](https://github.com/ch-makara-roth)
+- [All Contributors](../../contributors)
+
 ## License
 
-This package is open-sourced software licensed under the MIT license.
+The MIT License (MIT). Please see [License File](LICENSE.md) for more information.
