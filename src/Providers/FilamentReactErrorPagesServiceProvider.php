@@ -2,8 +2,6 @@
 
 namespace MakaraRoth\FilamentReactErrorPages\Providers;
 
-use Filament\Support\Assets\Asset;
-use Filament\Support\Facades\FilamentAsset;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Contracts\Debug\ExceptionHandler;
 use Illuminate\Support\Facades\Blade;
@@ -13,6 +11,13 @@ use MakaraRoth\FilamentReactErrorPages\Http\Middleware\HandleErrorsWithReact;
 
 class FilamentReactErrorPagesServiceProvider extends ServiceProvider
 {
+    /**
+     * Indicates if Filament is installed.
+     * 
+     * @var bool
+     */
+    protected $filamentInstalled = false;
+
     /**
      * Register any application services.
      *
@@ -29,6 +34,9 @@ class FilamentReactErrorPagesServiceProvider extends ServiceProvider
         $this->app->singleton('filament-react-error-pages', function ($app) {
             return new \MakaraRoth\FilamentReactErrorPages\FilamentReactErrorPages();
         });
+        
+        // Check if Filament is installed
+        $this->checkFilamentInstallation();
     }
 
     /**
@@ -56,18 +64,27 @@ class FilamentReactErrorPagesServiceProvider extends ServiceProvider
         // Load views
         $this->loadViewsFrom(__DIR__.'/../../resources/views', 'filament-react-error-pages');
 
-        // Register Filament assets
-        $this->registerFilamentAssets();
+        // Register Filament assets if Filament is installed
+        if ($this->filamentInstalled && config('filament-react-error-pages.use_in_filament', true)) {
+            $this->registerFilamentAssets();
+            $this->configureFilamentIntegration();
+        }
 
         // Configure error handling if enabled
         if (config('filament-react-error-pages.use_custom_error_pages', true)) {
             $this->configureErrorHandling();
         }
+    }
 
-        // Configure Filament integration if enabled
-        if (config('filament-react-error-pages.use_in_filament', true)) {
-            $this->configureFilamentIntegration();
-        }
+    /**
+     * Check if Filament is installed.
+     *
+     * @return void
+     */
+    protected function checkFilamentInstallation()
+    {
+        $this->filamentInstalled = class_exists('Filament\\Support\\Assets\\Asset') && 
+                                   class_exists('Filament\\Support\\Facades\\FilamentAsset');
     }
 
     /**
@@ -77,16 +94,40 @@ class FilamentReactErrorPagesServiceProvider extends ServiceProvider
      */
     protected function registerFilamentAssets()
     {
-        // Register package scripts and styles with Filament
-        FilamentAsset::register([
+        // Only register if Filament is installed
+        if (!$this->filamentInstalled) {
+            return;
+        }
+
+        try {
+            // Import the classes dynamically to avoid errors when Filament is not installed
+            $filamentAsset = app('Filament\\Support\\Facades\\FilamentAsset');
+            $assetClass = 'Filament\\Support\\Assets\\Asset';
+
+            // Register package scripts and styles with Filament
+            $assets = [];
+
             // CSS
-            Asset::make('filament-react-error-pages-styles', __DIR__.'/../../dist/css/app.css')
-                ->isStylesheet(),
+            $cssAsset = new $assetClass(
+                'filament-react-error-pages-styles', 
+                __DIR__.'/../../dist/css/app.css'
+            );
+            $assets[] = $cssAsset->isStylesheet();
             
             // JS
-            Asset::make('filament-react-error-pages-scripts', __DIR__.'/../../dist/js/app.js')
-                ->isScript(),
-        ]);
+            $jsAsset = new $assetClass(
+                'filament-react-error-pages-scripts', 
+                __DIR__.'/../../dist/js/app.js'
+            );
+            $assets[] = $jsAsset->isScript();
+
+            $filamentAsset::register($assets);
+        } catch (\Exception $e) {
+            // Log the error but don't crash the application
+            if (function_exists('logger')) {
+                logger()->error('Failed to register Filament assets: ' . $e->getMessage());
+            }
+        }
     }
 
     /**
@@ -117,9 +158,21 @@ class FilamentReactErrorPagesServiceProvider extends ServiceProvider
      */
     protected function configureFilamentIntegration()
     {
-        // Register error pages with Filament
-        // This will be executed when Filament is installed and being used
-        // The exact implementation depends on what integration points Filament provides
+        // Only configure if Filament is installed
+        if (!$this->filamentInstalled) {
+            return;
+        }
+
+        try {
+            // Register error pages with Filament
+            // This will be executed when Filament is installed and being used
+            // The exact implementation depends on what integration points Filament provides
+        } catch (\Exception $e) {
+            // Log the error but don't crash the application
+            if (function_exists('logger')) {
+                logger()->error('Failed to configure Filament integration: ' . $e->getMessage());
+            }
+        }
     }
 }
 
