@@ -1,3 +1,6 @@
+// Import styles
+import './styles/index.css';
+
 // Export error components
 export { default as NotFound } from './components/errors/NotFound';
 export { default as ServerError } from './components/errors/ServerError';

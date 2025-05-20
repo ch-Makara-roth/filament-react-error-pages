@@ -41,6 +41,29 @@ php artisan vendor:publish --tag=filament-react-error-pages-config
 php artisan vendor:publish --tag=filament-react-error-pages-assets
 ```
 
+### Troubleshooting Installation
+
+If you encounter an error during the `artisan filament:upgrade` command after installation that indicates missing asset files, please ensure you're using the latest version of the package:
+
+```bash
+composer require makararoth/filament-react-error-pages:^0.1.5
+```
+
+The error might look like:
+```
+ErrorException: copy(...): Failed to open stream: No such file or directory
+```
+
+This issue was fixed in version 0.1.5 by ensuring the required asset files are properly published and available in the correct location.
+
+If you're still experiencing issues after upgrading, you may need to manually publish the assets:
+
+```bash
+php artisan vendor:publish --tag=filament-react-error-pages-assets --force
+```
+
+This will ensure the CSS and JavaScript files are properly published to your application.
+
 ## Configuration
 
 After publishing the configuration file, you can customize the error pages in the `config/filament-react-error-pages.php` file:

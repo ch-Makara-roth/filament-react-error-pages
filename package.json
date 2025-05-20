@@ -5,6 +5,7 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
+    "postbuild": "mkdir -p public/js public/css && cp dist/js/app.js public/js/app.js && cp dist/css/app.css public/css/app.css",
     "preview": "vite preview",
     "test": "vitest"
   },
@@ -13,6 +14,7 @@
     "react-dom": "^18.2.0"
   },
   "devDependencies": {
+    "@tailwindcss/postcss": "^4.1.7",
     "@testing-library/jest-dom": "^6.6.3",
     "@testing-library/react": "^16.3.0",
     "@types/react": "^18.2.15",

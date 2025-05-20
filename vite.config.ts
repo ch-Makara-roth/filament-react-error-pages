@@ -25,7 +25,7 @@ export default defineConfig({
       // Define entry point for the error page components
       entry: resolve(__dirname, 'resources/tsx/index.ts'),
       name: 'FilamentReactErrorPages',
-      fileName: (format) => `js/app.${format}.js`,
+      fileName: (format) => format === 'es' ? 'js/app.js' : `js/app.${format}.js`,
     },
     rollupOptions: {
       // External dependencies that shouldn't be bundled
