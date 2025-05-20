@@ -102,24 +102,24 @@ class FilamentReactErrorPagesServiceProvider extends ServiceProvider
         try {
             // Import the classes dynamically to avoid errors when Filament is not installed
             $filamentAsset = app('Filament\\Support\\Facades\\FilamentAsset');
-            $assetClass = 'Filament\\Support\\Assets\\Asset';
-
+            
             // Register package scripts and styles with Filament
             $assets = [];
 
-            // CSS
-            $cssAsset = new $assetClass(
+            // CSS - use the concrete Css class instead of the abstract Asset class
+            $cssAsset = new \Filament\Support\Assets\Css(
                 'filament-react-error-pages-styles', 
                 __DIR__.'/../../dist/css/app.css'
             );
-            $assets[] = $cssAsset->isStylesheet();
+            $assets[] = $cssAsset;
             
-            // JS
-            $jsAsset = new $assetClass(
+            // JS - use the concrete Js class instead of the abstract Asset class
+            $jsAsset = new \Filament\Support\Assets\Js(
                 'filament-react-error-pages-scripts', 
                 __DIR__.'/../../dist/js/app.js'
             );
-            $assets[] = $jsAsset->isScript();
+            $assets[] = $jsAsset;
+            
 
             $filamentAsset::register($assets);
         } catch (\Exception $e) {
