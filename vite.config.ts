@@ -50,7 +50,10 @@ export default defineConfig({
       '@': resolve(__dirname, 'resources/tsx'),
     },
   },
-  
+ // CSS configuration
+  css: {
+    postcss: './postcss.config.mjs', // Explicitly point to PostCSS config
+  }, 
   // Optimize dependencies
   optimizeDeps: {
     include: ['react', 'react-dom'],

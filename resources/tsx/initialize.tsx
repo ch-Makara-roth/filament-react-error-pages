@@ -30,7 +30,8 @@ export const initErrorPages = (): void => {
   const componentName = settings.componentName;
   const Component = ErrorComponents[componentName as keyof typeof ErrorComponents];
   
-  if (!Component) {
+  // Check if Component exists and is a valid React component
+  if (!Component || typeof Component !== 'function') {
     console.error(`Error component "${componentName}" not found, using GenericError instead`);
     // Fallback to generic error component
     const GenericError = ErrorComponents.GenericError;
@@ -51,12 +52,13 @@ export const initErrorPages = (): void => {
     );
     return;
   }
-  
   // Create root and render the appropriate error component
   const root = ReactDOM.createRoot(container);
+  // Use type assertion to tell TypeScript that Component is a valid JSX element
+  const ErrorComponent = Component as React.ComponentType<any>;
   root.render(
     <React.StrictMode>
-      <Component 
+      <ErrorComponent 
         errorCode={settings.errorCode} 
         {...settings.props} 
       />
@@ -73,3 +75,4 @@ if (typeof window !== 'undefined') {
     initErrorPages();
   }
 }
+

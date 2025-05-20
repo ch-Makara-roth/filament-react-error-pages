@@ -41,7 +41,6 @@ const ErrorLayout: React.FC<ErrorLayoutProps> = ({
   backgroundColor = '#ffffff',
   textColor = '#1f2937',
   showErrorCode = true,
-  additionalInfo,
   companyName,
   supportEmail,
 }) => {

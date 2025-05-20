@@ -15,7 +15,7 @@ export { default as GenericError } from './components/errors/GenericError';
 export { default as ErrorLayout } from './components/ErrorLayout';
 
 // Main initialization function
-import { initErrorPages } from './initialize';
+import { initErrorPages } from './initialize.tsx';
 export { initErrorPages };
 
 // Auto-initialize in browser environments
@@ -26,13 +26,3 @@ if (typeof window !== 'undefined') {
     initErrorPages();
   }
 }
-
-// Default export for convenience
-export default {
-  NotFound,
-  ServerError,
-  GenericError,
-  ErrorLayout,
-  initErrorPages
-};
-
