@@ -12,7 +12,10 @@ export default defineConfig({
       insertTypesEntry: true,
     }),
   ],
-  
+ test: {
+    environment: 'jsdom', // Required for React component testing
+    setupFiles: './resources/tsx/setupTests.ts', // Point to your setup file
+  }, 
   // Define the build configuration
   build: {
     outDir: 'dist',
