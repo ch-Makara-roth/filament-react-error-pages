@@ -188,6 +188,34 @@ Please see [CHANGELOG.md](CHANGELOG.md) for more information on what has changed
 
 Contributions are welcome! Please feel free to submit a Pull Request.
 
+## For Maintainers
+
+### Releasing a New Version
+
+When releasing a new version of this package, follow these steps to ensure assets are properly included:
+
+1. Make your changes to the codebase
+2. Run the build process to generate assets:
+   ```bash
+   npm run build
+   ```
+3. Check that the following files exist and have content:
+   - `dist/js/app.js`
+   - `dist/css/app.css`
+   - `public/js/app.js`
+   - `public/css/app.css`
+4. Update the version number in `package.json`
+5. Update the `CHANGELOG.md` with details of the changes
+6. Commit all changes, including the built assets in the `dist` directory
+7. Tag the release with the new version number
+8. Push to the repository with tags:
+   ```bash
+   git push --tags
+   ```
+9. The package will automatically update on Packagist
+
+**Important**: Do not ignore the `/dist` directory in `.gitignore`. The built assets must be included in the repository for the package to work correctly when installed via Composer.
+
 ## Security Vulnerabilities
 
 If you discover a security vulnerability, please send an e-mail to Makara Roth via [your-email@example.com](mailto:your-email@example.com). All security vulnerabilities will be promptly addressed.

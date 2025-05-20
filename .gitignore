@@ -4,7 +4,8 @@
 /.vscode
 /.idea
 /.DS_Store
-/dist
+# We need to include the dist directory to ensure built assets are available
+# when the package is installed via Composer
 /coverage
 .env
 composer.lock
